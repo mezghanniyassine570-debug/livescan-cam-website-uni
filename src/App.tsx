@@ -103,14 +103,32 @@ const ClientCamera = () => {
 
   const join = async () => {
     try {
-      const ms = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' }, audio: true });
+      // Try back camera first
+      let ms;
+      try {
+        ms = await navigator.mediaDevices.getUserMedia({ 
+          video: { facingMode: 'environment', width: { ideal: 1280 }, height: { ideal: 720 } }, 
+          audio: true 
+        });
+      } catch (err) {
+        // Fallback to any camera
+        ms = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+      }
+
       setStream(ms);
-      if (videoRef.current) videoRef.current.srcObject = ms;
+      if (videoRef.current) {
+        videoRef.current.srcObject = ms;
+        // Explicitly play for mobile compatibility
+        videoRef.current.play().catch(e => console.error("Video play failed", e));
+      }
+      
       const p = new Peer();
       p.on('open', (id) => socket.emit('register-streamer', id));
       setPeer(p);
       setJoined(true);
-    } catch (e) { alert('Camera access required.'); }
+    } catch (e: any) { 
+      alert(`Camera Error: ${e.message}. Please ensure you have granted camera permissions in your browser settings.`); 
+    }
   };
 
   const capture = () => {
