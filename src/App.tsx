@@ -103,23 +103,26 @@ const ClientCamera = () => {
 
   const join = async () => {
     try {
-      // Try back camera first
-      let ms;
-      try {
-        ms = await navigator.mediaDevices.getUserMedia({ 
-          video: { facingMode: 'environment', width: { ideal: 1280 }, height: { ideal: 720 } }, 
-          audio: true 
-        });
-      } catch (err) {
-        // Fallback to any camera
-        ms = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
-      }
+      // Simplest possible camera request first
+      const ms = await navigator.mediaDevices.getUserMedia({ 
+        video: { facingMode: 'environment' }, 
+        audio: false // Audio often causes permission blocks on mobile
+      });
 
       setStream(ms);
       if (videoRef.current) {
         videoRef.current.srcObject = ms;
-        // Explicitly play for mobile compatibility
-        videoRef.current.play().catch(e => console.error("Video play failed", e));
+        // The "Bulletproof" play sequence
+        const playVideo = async () => {
+          try {
+            await videoRef.current?.play();
+          } catch (err) {
+            console.log("Autoplay blocked, retrying...");
+            // Fallback: try again in 500ms
+            setTimeout(playVideo, 500);
+          }
+        };
+        playVideo();
       }
       
       const p = new Peer();
@@ -127,7 +130,15 @@ const ClientCamera = () => {
       setPeer(p);
       setJoined(true);
     } catch (e: any) { 
-      alert(`Camera Error: ${e.message}. Please ensure you have granted camera permissions in your browser settings.`); 
+      // Last resort: any camera available
+      try {
+        const fallbackMs = await navigator.mediaDevices.getUserMedia({ video: true });
+        setStream(fallbackMs);
+        if (videoRef.current) videoRef.current.srcObject = fallbackMs;
+        setJoined(true);
+      } catch (finalErr: any) {
+        alert(`Camera Error: Please check your site settings and allow camera access. (${finalErr.message})`);
+      }
     }
   };
 
