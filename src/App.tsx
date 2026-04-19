@@ -21,18 +21,20 @@ const Navbar = () => {
 
   return (
     <nav className="navbar">
-      <Link to="/" className="flex items-center gap-3 no-underline group">
-        <div className="w-10 h-10 bg-primary rounded-xl flex items-center justify-center transition-transform group-hover:scale-110 group-hover:rotate-3 shadow-lg shadow-primary/20">
-          <Camera size={20} className="text-white" />
+      <Link to="/" className="flex items-center gap-2 no-underline group">
+        <div className="w-8 h-8 sm:w-10 sm:h-10 bg-primary rounded-lg sm:rounded-xl flex items-center justify-center transition-transform group-hover:scale-110 group-hover:rotate-3 shadow-lg shadow-primary/20">
+          <Camera size={18} className="text-white" />
         </div>
-        <span className="text-xl font-black tracking-tighter text-white hidden sm:block">LIVE<span className="text-primary">SCAN</span></span>
+        <span className="text-lg sm:text-xl font-black tracking-tighter text-white">
+          LIVE<span className="text-primary xs-hidden">SCAN</span>
+        </span>
       </Link>
       <div className="nav-links">
         <Link to="/gallery" className={pathname === '/gallery' ? 'active' : ''}>Gallery</Link>
         <Link to="/admin" className={pathname === '/admin' ? 'active' : ''}>Admin</Link>
       </div>
-      <Link to="/client" className="btn btn-primary !py-2.5 !px-5 rounded-full text-xs shadow-none">
-        <Camera size={14} /> <span className="hidden sm:inline">Join Live</span>
+      <Link to="/client" className="btn btn-primary !py-1.5 !px-3 sm:!py-2.5 sm:!px-5 rounded-full text-[10px] sm:text-xs shadow-none">
+        <Camera size={12} className="sm:mr-1" /> <span className="hidden sm:inline">Join Live</span>
       </Link>
     </nav>
   );
@@ -180,14 +182,14 @@ const AdminDashboard = () => {
 
   return (
     <div className="page-container">
-      <div className="flex flex-col lg:flex-row justify-between items-start lg:items-end gap-8 mb-16">
-        <div>
-          <h2 className="text-5xl font-black mb-4">Command <span className="text-gradient">Center</span></h2>
-          <div className="flex items-center gap-4">
-             <div className="status-badge bg-primary/10 border-primary/20 text-primary">
-               <Activity size={14} /> LIVE MODERATION
+      <div className="flex flex-col lg:flex-row justify-between items-start lg:items-end gap-6 mb-12 sm:mb-16">
+        <div className="w-full">
+          <h2 className="text-3xl sm:text-5xl font-black mb-3 sm:mb-4">Command <span className="text-gradient">Center</span></h2>
+          <div className="flex flex-wrap items-center gap-3">
+             <div className="status-badge bg-primary/10 border-primary/20 text-primary !py-1 !px-3">
+               <Activity size={12} /> <span className="text-[10px] sm:text-xs">LIVE MODERATION</span>
              </div>
-             <p className="text-text-muted">Currently monitoring {photos.length} total captures.</p>
+             <p className="text-xs sm:text-base text-text-muted">Monitoring {photos.length} total captures.</p>
           </div>
         </div>
         
@@ -288,16 +290,16 @@ const PublicGallery = () => {
 
   return (
     <div className="page-container">
-      <header className="text-center mb-20">
+      <header className="text-center mb-12 sm:mb-20">
         <motion.div 
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="inline-flex items-center gap-2 px-4 py-2 bg-primary/5 border border-primary/20 rounded-full text-primary text-xs font-bold mb-6"
+          className="inline-flex items-center gap-2 px-3 py-1.5 sm:px-4 sm:py-2 bg-primary/5 border border-primary/20 rounded-full text-primary text-[10px] sm:text-xs font-bold mb-4 sm:mb-6"
         >
-          <Sparkles size={14} /> LIVE COMMUNITY WALL
+          <Sparkles size={12} className="sm:w-3.5 sm:h-3.5" /> LIVE COMMUNITY WALL
         </motion.div>
         <h1 className="hero-title">Live <span className="text-gradient">Gallery.</span></h1>
-        <p className="hero-subtitle">Authentic moments from our community, updated in real-time as they happen.</p>
+        <p className="hero-subtitle px-4">Authentic moments from our community, updated in real-time as they happen.</p>
       </header>
 
       {photos.length === 0 ? (

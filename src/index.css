@@ -72,21 +72,21 @@ body {
 /* --- Navigation --- */
 .navbar {
   position: fixed;
-  top: 1.5rem;
+  top: 1.25rem;
   left: 50%;
   transform: translateX(-50%);
   z-index: 1000;
-  width: 90%;
+  width: 92%;
   max-width: 800px;
-  background: var(--bg-card);
-  backdrop-filter: blur(20px) saturate(180%);
+  background: rgba(15, 23, 42, 0.7);
+  backdrop-filter: blur(24px) saturate(180%);
   border: 1px solid var(--glass-border);
   border-radius: 100px;
-  padding: 0.75rem 1.5rem;
+  padding: 0.6rem 1.25rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5), inset 0 0 0 1px var(--glass-highlight);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4), inset 0 0 0 1px var(--glass-highlight);
 }
 
 .nav-links {
@@ -146,10 +146,27 @@ body {
 }
 
 @media (max-width: 640px) {
-  .page-container { padding: 7rem 1.25rem 4rem; }
-  .glass-card { padding: 1.75rem; border-radius: 24px; }
-  .navbar { width: 95%; padding: 0.5rem 1rem; }
-  .nav-links { gap: 1rem; }
+  .page-container { padding: 7.5rem 1rem 3rem; }
+  .glass-card { padding: 1.25rem; border-radius: 20px; }
+  .navbar { 
+    width: 96%; 
+    padding: 0.35rem 0.6rem; 
+    top: 0.75rem;
+  }
+  .nav-links { gap: 0.6rem; }
+  .nav-links a { font-size: 0.65rem; letter-spacing: 0.5px; }
+}
+
+@media (max-width: 400px) {
+  .nav-links { gap: 0.4rem; }
+  .navbar { padding: 0.35rem 0.4rem; }
+  .hidden-xs { display: none !important; }
+}
+
+.xs-only { display: none; }
+@media (max-width: 480px) {
+  .xs-only { display: block; }
+  .xs-hidden { display: none; }
 }
 
 /* --- Typography --- */
@@ -325,8 +342,11 @@ h1, h2, h3, h4 {
 
 /* --- Mobile Fixes --- */
 @media (max-width: 640px) {
-  .hero-title { font-size: 3.5rem; }
-  .gallery-grid { grid-template-columns: 1fr; gap: 1.5rem; }
-  .btn { width: 100%; padding: 1rem 1.5rem; }
+  .hero-title { font-size: 2.75rem; margin-bottom: 1rem; }
+  .hero-subtitle { font-size: 1rem; margin-bottom: 2rem; }
+  .gallery-grid { grid-template-columns: 1fr; gap: 1.25rem; }
+  .btn { width: 100%; padding: 0.875rem 1.25rem; border-radius: 12px; font-size: 0.9rem; }
+  .stat-value { font-size: 2.25rem; }
+  .stat-card { padding: 1.25rem; }
 }
 
