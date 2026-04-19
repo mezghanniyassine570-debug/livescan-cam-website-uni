@@ -293,44 +293,50 @@ const PublicGallery = () => {
 
   return (
     <div className="page-container">
-      <header className="text-center mb-12 sm:mb-20">
+      <header className="text-center mb-16 sm:mb-24">
         <motion.div 
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="inline-flex items-center gap-2 px-3 py-1.5 sm:px-4 sm:py-2 bg-primary/5 border border-primary/20 rounded-full text-primary text-[10px] sm:text-xs font-bold mb-4 sm:mb-6"
+          className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 border border-primary/20 rounded-full text-primary text-xs font-bold mb-8"
         >
-          <Sparkles size={12} className="sm:w-3.5 sm:h-3.5" /> LIVE COMMUNITY WALL
+          <Sparkles size={14} /> LIVE COMMUNITY WALL
         </motion.div>
         <h1 className="hero-title">Live <span className="text-gradient">Gallery.</span></h1>
-        <p className="hero-subtitle px-4">Authentic moments from our community, updated in real-time as they happen.</p>
+        <p className="hero-subtitle max-w-2xl">A curated stream of authentic moments captured live by our community across the globe.</p>
       </header>
 
       {photos.length === 0 ? (
-        <div className="glass-card text-center py-32 border-dashed opacity-40">
+        <div className="glass-card text-center py-40 border-dashed opacity-40">
           <ImageIcon size={64} className="mx-auto mb-6 text-text-muted" />
-          <p className="text-2xl font-bold mb-2">The wall is waiting.</p>
-          <p className="text-text-muted">Start capturing to see your moments here.</p>
+          <p className="text-2xl font-bold mb-2">The wall is currently empty.</p>
+          <p className="text-text-muted">Waiting for new captures to arrive...</p>
         </div>
       ) : (
         <div className="gallery-grid">
-          <AnimatePresence>
+          <AnimatePresence mode="popLayout">
             {photos.map((p) => (
               <motion.div 
                 key={p.id}
-                initial={{ opacity: 0, scale: 0.9 }}
+                layout
+                initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
-                className="photo-card"
+                className="photo-card group"
               >
-                <img src={p.url} alt={`By ${p.userName}`} />
-                <div className="photo-overlay">
-                  <div className="flex items-center gap-4">
-                     <div className="w-12 h-12 bg-primary rounded-2xl flex items-center justify-center font-black text-white text-lg shadow-lg shadow-primary/30">
-                       {p.userName.charAt(0).toUpperCase()}
-                     </div>
-                     <div>
-                       <p className="font-black text-xl leading-none mb-1">{p.userName}</p>
-                       <p className="text-[10px] text-primary font-black tracking-[0.2em] uppercase">Verified Capture</p>
-                     </div>
+                <img src={p.url} alt={`Captured by ${p.userName}`} />
+                <div className="photo-overlay bg-gradient-to-t from-bg-dark/95 via-bg-dark/40 to-transparent pt-20">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-4">
+                       <div className="w-12 h-12 bg-primary/20 backdrop-blur-xl border border-white/10 rounded-2xl flex items-center justify-center font-black text-primary text-lg shadow-inner">
+                         {p.userName.charAt(0).toUpperCase()}
+                       </div>
+                       <div>
+                         <p className="font-black text-xl text-white leading-tight">{p.userName}</p>
+                         <p className="text-[10px] text-primary font-black tracking-widest uppercase mt-1">Verified Moment</p>
+                       </div>
+                    </div>
+                    <div className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white/40 group-hover:text-primary group-hover:bg-primary/10 transition-all">
+                      <ExternalLink size={16} />
+                    </div>
                   </div>
                 </div>
               </motion.div>
