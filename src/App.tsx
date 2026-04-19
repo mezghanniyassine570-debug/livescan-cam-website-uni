@@ -94,70 +94,31 @@ const Home = () => {
 const ClientCamera = () => {
   const [name, setName] = useState('');
   const [joined, setJoined] = useState(false);
-  const [stream, setStream] = useState<MediaStream | null>(null);
-  const [streaming, setStreaming] = useState(false);
   const [capturing, setCapturing] = useState(false);
   const [success, setSuccess] = useState(false);
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const [peer, setPeer] = useState<Peer | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const join = async () => {
-    try {
-      // Simplest possible camera request first
-      const ms = await navigator.mediaDevices.getUserMedia({ 
-        video: { facingMode: 'environment' }, 
-        audio: false // Audio often causes permission blocks on mobile
-      });
-
-      setStream(ms);
-      if (videoRef.current) {
-        videoRef.current.srcObject = ms;
-        // The "Bulletproof" play sequence
-        const playVideo = async () => {
-          try {
-            await videoRef.current?.play();
-          } catch (err) {
-            console.log("Autoplay blocked, retrying...");
-            // Fallback: try again in 500ms
-            setTimeout(playVideo, 500);
-          }
-        };
-        playVideo();
-      }
-      
-      const p = new Peer();
-      p.on('open', (id) => socket.emit('register-streamer', id));
-      setPeer(p);
-      setJoined(true);
-    } catch (e: any) { 
-      // Last resort: any camera available
-      try {
-        const fallbackMs = await navigator.mediaDevices.getUserMedia({ video: true });
-        setStream(fallbackMs);
-        if (videoRef.current) videoRef.current.srcObject = fallbackMs;
-        setJoined(true);
-      } catch (finalErr: any) {
-        alert(`Camera Error: Please check your site settings and allow camera access. (${finalErr.message})`);
-      }
-    }
+  const join = () => {
+    if (name) setJoined(true);
   };
 
-  const capture = () => {
-    const canvas = document.createElement('canvas');
-    const video = videoRef.current!;
-    canvas.width = video.videoWidth;
-    canvas.height = video.videoHeight;
-    canvas.getContext('2d')?.drawImage(video, 0, 0);
-    canvas.toBlob(async (b) => {
-      const fd = new FormData();
-      fd.append('photo', b!, 'c.jpg');
-      fd.append('userName', name);
-      setCapturing(true);
+  const handleNativeCapture = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const fd = new FormData();
+    fd.append('photo', file);
+    fd.append('userName', name);
+    
+    setCapturing(true);
+    try {
       await fetch(`${SERVER_URL}/upload`, { method: 'POST', body: fd });
-      setCapturing(false);
       setSuccess(true);
       setTimeout(() => setSuccess(false), 3000);
-    }, 'image/jpeg', 0.8);
+    } catch (err) {
+      alert("Upload failed. Please check your connection.");
+    }
+    setCapturing(false);
   };
 
   if (!joined) {
@@ -169,22 +130,21 @@ const ClientCamera = () => {
           className="glass-card max-w-sm text-center relative overflow-hidden"
         >
           <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-right from-primary to-accent" />
-          <div className="w-20 h-20 bg-primary/10 rounded-3xl mx-auto mb-8 flex items-center justify-center shadow-inner">
+          <div className="w-20 h-20 bg-primary/10 rounded-3xl mx-auto mb-8 flex items-center justify-center">
             <User size={40} className="text-primary" />
           </div>
           <h2 className="text-3xl font-black mb-2">Identify</h2>
-          <p className="text-text-secondary text-sm mb-10">Enter your name to start sharing live moments with the world.</p>
+          <p className="text-text-secondary text-sm mb-10">Enter your name to start sharing live moments.</p>
           
           <div className="space-y-6">
             <input 
               className="input-field"
               placeholder="Full Name"
               value={name}
-              autoFocus
               onChange={(e) => setName(e.target.value)}
             />
             <button disabled={!name} onClick={join} className="btn btn-primary w-full py-5 text-lg shadow-2xl">
-              Connect Camera <ArrowRight size={20} />
+              Start Capturing <ArrowRight size={20} />
             </button>
           </div>
         </motion.div>
@@ -193,55 +153,53 @@ const ClientCamera = () => {
   }
 
   return (
-    <div className="mobile-fullscreen">
-      <video ref={videoRef} autoPlay playsInline muted className="camera-preview" />
-      
-      {/* Top Overlay */}
-      <div className="absolute top-8 left-6 right-6 flex justify-between items-start pointer-events-none">
-        <div className="status-badge pointer-events-auto">
-          <div className={`w-2 h-2 rounded-full ${streaming ? 'bg-red-500 animate-pulse' : 'bg-emerald-500'}`} />
-          <span className="font-black uppercase text-[10px]">{name} • {streaming ? 'LIVE' : 'READY'}</span>
+    <div className="page-container h-screen flex flex-col items-center justify-center text-center p-6 !pt-0">
+      <div className="glass-card max-w-sm flex flex-col items-center gap-8 py-12">
+        <div className="relative">
+          <div className="w-24 h-24 bg-primary/20 rounded-full flex items-center justify-center animate-pulse">
+            <Camera size={48} className="text-primary" />
+          </div>
+          <div className="absolute -top-2 -right-2 bg-emerald-500 w-6 h-6 rounded-full border-4 border-slate-900" />
         </div>
-        <button onClick={() => window.location.reload()} className="p-3 bg-white/10 backdrop-blur-xl border border-white/10 rounded-2xl pointer-events-auto">
-          <RefreshCw size={24} className="text-white" />
-        </button>
-      </div>
 
-      {/* Success Notification */}
-      <AnimatePresence>
-        {success && (
-          <motion.div 
-            initial={{ y: -50, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            exit={{ y: -50, opacity: 0 }}
-            className="absolute top-24 left-1/2 -translate-x-1/2 z-50 pointer-events-none"
-          >
-            <div className="bg-emerald-500 text-white px-8 py-3 rounded-full font-black text-xs shadow-[0_0_30px_rgba(16,185,129,0.5)] flex items-center gap-3">
-              <CheckCircle size={18} /> CAPTURE SENT FOR REVIEW
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+        <div>
+          <h2 className="text-2xl font-black mb-2">Ready, {name.split(' ')[0]}?</h2>
+          <p className="text-text-secondary text-sm">Click below to open your phone's camera and capture a moment.</p>
+        </div>
 
-      {/* Bottom Controls */}
-      <div className="camera-controls">
+        <input 
+          type="file" 
+          accept="image/*" 
+          capture="environment" 
+          className="hidden" 
+          ref={fileInputRef} 
+          onChange={handleNativeCapture}
+        />
+
         <button 
-          onClick={() => { if (!streaming) { peer?.call('admin-dashboard', stream!); setStreaming(true); } else window.location.reload(); }}
-          className={`p-5 rounded-2xl backdrop-blur-xl border ${streaming ? 'bg-red-500/20 border-red-500 text-red-400' : 'bg-white/5 border-white/10 text-white'}`}
+          onClick={() => fileInputRef.current?.click()}
+          disabled={capturing}
+          className="btn btn-primary w-full py-6 text-xl shadow-[0_20px_40px_rgba(99,102,241,0.4)]"
         >
-          <Tv size={32} />
+          {capturing ? <RefreshCw className="animate-spin" /> : <><Camera size={28} /> Open Camera</>}
         </button>
 
-        <button onClick={capture} disabled={capturing} className="shutter-btn group">
-           <div className="w-16 h-16 rounded-full border-2 border-slate-900 flex items-center justify-center">
-             {capturing && <RefreshCw size={32} className="text-primary animate-spin" />}
-             {!capturing && <div className="w-12 h-12 bg-slate-900/5 rounded-full" />}
-           </div>
-        </button>
+        <AnimatePresence>
+          {success && (
+            <motion.div 
+              initial={{ y: 20, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              exit={{ y: 20, opacity: 0 }}
+              className="bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 px-6 py-2 rounded-full font-black text-[10px] tracking-widest uppercase"
+            >
+              Capture Sent Successfully
+            </motion.div>
+          )}
+        </AnimatePresence>
 
-        <div className="w-[72px] h-[72px] flex items-center justify-center opacity-30">
-          <Sparkles className="text-white" />
-        </div>
+        <p className="text-[10px] text-text-secondary uppercase font-bold tracking-widest mt-4">
+          Verified Device • Secure Tunnel
+        </p>
       </div>
     </div>
   );
