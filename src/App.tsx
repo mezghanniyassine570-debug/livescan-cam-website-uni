@@ -6,7 +6,8 @@ import {
   Monitor, Smartphone, CheckCircle, RefreshCw, 
   X, Check, User, ExternalLink, ArrowRight, Zap,
   Globe, Shield, QrCode, Sparkles, Lock, LogIn,
-  Send, RotateCcw, ChevronRight, Activity, TrendingUp
+  Send, RotateCcw, ChevronRight, Activity, TrendingUp,
+  Heart, Stars, Gift, Calendar, Music
 } from 'lucide-react';
 import { QRCodeSVG } from 'qrcode.react';
 import io from 'socket.io-client';
@@ -23,10 +24,10 @@ const Navbar = () => {
     <nav className="navbar">
       <Link to="/" className="flex items-center gap-2 no-underline group">
         <div className="w-8 h-8 sm:w-10 sm:h-10 bg-primary rounded-lg sm:rounded-xl flex items-center justify-center transition-transform group-hover:scale-110 group-hover:rotate-3 shadow-lg shadow-primary/20">
-          <Camera size={18} className="text-white" />
+          <Heart size={18} className="text-white fill-white" />
         </div>
-        <span className="text-lg sm:text-xl font-black tracking-tighter text-white">
-          LIVE<span className="text-primary xs-hidden">SCAN</span>
+        <span className="text-lg sm:text-xl font-black tracking-tighter text-text-main">
+          OUR<span className="text-primary xs-hidden">MOMENTS</span>
         </span>
       </Link>
       <div className="nav-links">
@@ -75,31 +76,31 @@ const Home = () => {
         </motion.div>
 
         <motion.h1 variants={fadeInUp} className="hero-title">
-          The Future of <br />
-          <span className="text-gradient">Live Moments.</span>
+          Capturing Our <br />
+          <span className="text-gradient">Eternal Love.</span>
         </motion.h1>
 
         <motion.p variants={fadeInUp} className="hero-subtitle px-4 lg:px-0">
-          Experience events through the lens of everyone present. Instant, unedited, and authentic community storytelling.
+          Every guest a photographer. Every moment a treasure. Help us document our special day through your lens.
         </motion.p>
         
         <motion.div variants={fadeInUp} className="flex flex-col sm:flex-row justify-center items-center gap-6 mt-10 sm:mt-12 px-4">
           <Link to="/client" className="btn btn-primary group !py-5 !px-8 text-lg min-w-[240px]">
-            Start Capturing <ArrowRight size={22} className="transition-transform group-hover:translate-x-1" />
+            Share a Moment <Camera size={22} className="transition-transform group-hover:scale-110 ml-2" />
           </Link>
           <Link to="/gallery" className="btn btn-secondary !py-5 !px-8 text-lg min-w-[240px]">
-            View Live Gallery
+            View Guest Gallery
           </Link>
         </motion.div>
 
         <motion.div variants={fadeInUp} className="mt-24 sm:mt-32 grid grid-cols-1 sm:grid-cols-3 gap-8 sm:gap-12 px-6">
            {[
-             { icon: <Zap className="text-amber-400" />, title: "Instant", desc: "Real-time sync" },
-             { icon: <Shield className="text-emerald-400" />, title: "Moderated", desc: "Safe community" },
-             { icon: <Globe className="text-blue-400" />, title: "Global", desc: "Share everywhere" }
+             { icon: <Heart className="text-secondary fill-secondary" />, title: "Cherished", desc: "Forever preserved" },
+             { icon: <Sparkles className="text-primary" />, title: "Magical", desc: "Real-time celebration" },
+             { icon: <Gift className="text-amber-600" />, title: "Gifted", desc: "Shared with love" }
            ].map((item, i) => (
              <div key={i} className="flex flex-col items-center gap-4 group">
-               <div className="w-16 h-16 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center mb-2 shadow-2xl transition-all group-hover:scale-110 group-hover:border-primary/50 group-hover:bg-primary/5">
+               <div className="w-16 h-16 rounded-2xl bg-primary/5 border border-primary/10 flex items-center justify-center mb-2 shadow-2xl transition-all group-hover:scale-110 group-hover:border-primary/50 group-hover:bg-primary/5">
                  {React.cloneElement(item.icon as React.ReactElement, { size: 28 })}
                </div>
                <div className="text-center">
@@ -299,10 +300,10 @@ const PublicGallery = () => {
           animate={{ opacity: 1, y: 0 }}
           className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 border border-primary/20 rounded-full text-primary text-xs font-bold mb-8"
         >
-          <Sparkles size={14} /> LIVE COMMUNITY WALL
+          <Heart size={14} className="fill-primary" /> THE WEDDING CELEBRATION WALL
         </motion.div>
-        <h1 className="hero-title">Live <span className="text-gradient">Gallery.</span></h1>
-        <p className="hero-subtitle max-w-2xl">A curated stream of authentic moments captured live by our community across the globe.</p>
+        <h1 className="hero-title">Guest <span className="text-gradient">Gallery.</span></h1>
+        <p className="hero-subtitle max-w-2xl">A collection of beautiful moments captured by our family and friends today.</p>
       </header>
 
       {photos.length === 0 ? (
