@@ -758,51 +758,60 @@ const ClientCamera = () => {
             </motion.div>
           )
         ) : (
-          <div className="space-y-8">
-            <div className="aspect-video w-full rounded-3xl overflow-hidden bg-black border-2 border-white/10 shadow-2xl relative">
+          <div className="space-y-6">
+            <div className="aspect-[3/4] sm:aspect-video w-full rounded-[2rem] overflow-hidden bg-black border-2 border-white/10 shadow-2xl relative">
               <video 
                 ref={videoRef} 
                 autoPlay 
                 playsInline 
                 muted 
-                className={`w-full h-full object-cover ${isStreaming ? 'opacity-100' : 'opacity-40'}`} 
+                className={`w-full h-full object-cover transition-opacity duration-700 ${isStreaming ? 'opacity-100' : 'opacity-40'}`} 
               />
               <canvas ref={canvasRef} width="640" height="480" className="hidden" />
               
-              {isStreaming && (
-                <div className="absolute top-4 left-4 flex items-center gap-2 px-3 py-1 bg-red-600 rounded-full text-[10px] font-bold text-white animate-pulse">
-                  <div className="w-2 h-2 bg-white rounded-full" /> LIVE
-                </div>
-              )}
-              {isStreaming && (
-                <div className="absolute top-4 right-4 px-3 py-1 bg-black/60 backdrop-blur-md rounded-full text-[10px] font-bold text-white">
-                  {formatDuration(streamDuration)}
-                </div>
-              )}
+              <div className="absolute inset-x-0 top-0 p-6 flex justify-between items-start pointer-events-none">
+                {isStreaming && (
+                  <div className="flex items-center gap-2 px-4 py-2 bg-red-600 rounded-full text-[10px] font-black text-white shadow-xl animate-pulse">
+                    <div className="w-2 h-2 bg-white rounded-full" /> LIVE
+                  </div>
+                )}
+                {isStreaming && (
+                  <div className="px-4 py-2 bg-black/60 backdrop-blur-xl rounded-full text-[10px] font-black text-white border border-white/10 shadow-xl">
+                    {formatDuration(streamDuration)}
+                  </div>
+                )}
+              </div>
+
               {!isStreaming && (
-                <div className="absolute inset-0 flex items-center justify-center">
-                   <Tv size={48} className="text-white/20" />
+                <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 bg-black/20 backdrop-blur-[2px]">
+                   <div className="w-20 h-20 bg-white/10 rounded-full flex items-center justify-center border border-white/20">
+                     <Tv size={40} className="text-white/40" />
+                   </div>
+                   <p className="text-white/60 font-bold text-sm">Ready to broadcast?</p>
                 </div>
               )}
             </div>
 
-            <div className="space-y-4">
+            <div className="space-y-4 pt-2">
               {!isStreaming ? (
                 <button 
                   onClick={startLive}
-                  className="btn-premium btn-premium-primary"
+                  className="btn-premium btn-premium-primary !py-7"
                 >
                   <Tv size={32} /> Start Livestream
                 </button>
               ) : (
                 <button 
                   onClick={stopLive}
-                  className="btn-premium btn-premium-danger"
+                  className="btn-premium btn-premium-danger !py-7"
                 >
                   <X size={32} /> Stop Streaming
                 </button>
               )}
-              <p className="text-[10px] text-text-muted uppercase tracking-[0.2em] font-bold">Broadcasting to guest gallery</p>
+              <div className="flex items-center justify-center gap-2 opacity-40">
+                <Shield size={12} />
+                <p className="text-[10px] text-text-muted uppercase tracking-[0.2em] font-black">Secure Real-Time Feed</p>
+              </div>
             </div>
           </div>
         )}

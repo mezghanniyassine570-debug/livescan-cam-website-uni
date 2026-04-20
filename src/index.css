@@ -181,6 +181,8 @@ body {
   .nav-links a { font-size: 0.65rem; letter-spacing: 0.5px; }
 }
 
+.hidden { display: none !important; }
+
 /* Utility Classes (Tailwind-style) */
 .flex { display: flex; }
 .flex-col { flex-direction: column; }
