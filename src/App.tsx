@@ -30,7 +30,7 @@ const Navbar = () => {
         </div>
         <div className="flex flex-col -space-y-1">
           <span className="text-xl font-black tracking-[-0.05em] text-text-main leading-tight">
-            OUR<span className="text-primary">MOMENTS</span>
+            GS<span className="text-primary">PHOTOGRAPH</span>
           </span>
           <span className="text-[10px] font-bold tracking-[0.2em] text-text-muted uppercase">Live Celebration Feed</span>
         </div>
