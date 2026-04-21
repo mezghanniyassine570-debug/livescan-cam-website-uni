@@ -9,8 +9,8 @@
   --bg-card: rgba(255, 255, 255, 0.95);
   --glass-border: rgba(212, 175, 55, 0.2);
   --glass-highlight: rgba(255, 255, 255, 0.9);
-  --text-main: #1A1A1A;
-  --text-muted: #5A5A5A;
+  --text-main: #9B1B1B; /* Changed to Crimson */
+  --text-muted: #9B1B1B; /* Changed to Crimson */
   --font-heading: 'Playfair Display', serif;
   --font-body: 'Outfit', sans-serif;
   

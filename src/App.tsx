@@ -710,12 +710,12 @@ const ClientCamera = () => {
           !previewUrl ? (
             <>
               <div className="flex flex-col items-center">
-                <div className="w-24 h-24 bg-primary/5 rounded-full flex items-center justify-center mb-10 relative border border-primary/10">
-                  <Camera size={40} className="text-primary" strokeWidth={1.5} />
-                  <div className="absolute inset-0 border border-primary/20 border-dashed rounded-full animate-spin-slow" />
+                <div className="w-24 h-24 bg-primary/5 rounded-full flex items-center justify-center mb-10 relative border border-primary/20">
+                  <Camera size={40} className="text-secondary" strokeWidth={1.5} />
+                  <div className="absolute inset-0 border border-primary/30 border-dashed rounded-full animate-spin-slow" />
                 </div>
-                <h2 className="text-3xl font-black mb-3 tracking-tight">Ready, {name.split(' ')[0]}?</h2>
-                <p className="text-[10px] font-black text-text-muted uppercase tracking-[0.2em]">Capture a magical moment</p>
+                <h2 className="text-3xl font-black mb-3 tracking-tight text-secondary">Ready, {name.split(' ')[0]}?</h2>
+                <p className="text-[10px] font-black text-secondary uppercase tracking-[0.2em] opacity-80">Capture a magical moment</p>
               </div>
 
               <input 
@@ -730,7 +730,7 @@ const ClientCamera = () => {
               <button 
                 disabled={capturing}
                 onClick={() => fileInputRef.current?.click()}
-                className="btn-premium btn-premium-primary !rounded-full"
+                className="btn-premium btn-premium-primary !rounded-full !bg-secondary !shadow-secondary/20"
               >
                 {capturing ? <RefreshCw className="animate-spin" /> : <><Camera size={24} /> OPEN CAMERA</>}
               </button>
@@ -749,13 +749,13 @@ const ClientCamera = () => {
                  <button 
                   onClick={submitPhoto}
                   disabled={capturing}
-                  className="btn-premium btn-premium-primary !rounded-full"
+                  className="btn-premium btn-premium-primary !rounded-full !bg-secondary"
                 >
                   {capturing ? <RefreshCw className="animate-spin" /> : <><Send size={18} /> PUBLISH MOMENT</>}
                 </button>
                 <button 
                   onClick={() => { setSelectedFile(null); setPreviewUrl(null); }}
-                  className="btn btn-secondary !w-full !rounded-full py-4 text-xs font-black tracking-widest uppercase"
+                  className="btn btn-secondary !w-full !rounded-full py-4 text-xs font-black tracking-widest uppercase !text-secondary !border-secondary/20"
                 >
                   <RotateCcw size={14} /> TRY AGAIN
                 </button>
@@ -763,8 +763,8 @@ const ClientCamera = () => {
             </motion.div>
           )
         ) : (
-          <div className="space-y-8">
-            <div className="aspect-[3/4] sm:aspect-video w-full rounded-[3rem] overflow-hidden bg-[#0a0a0a] border-4 border-white shadow-2xl relative">
+          <div className="space-y-10">
+            <div className="aspect-[3/4] sm:aspect-video w-full rounded-[3.5rem] overflow-hidden bg-[#0a0a0a] border-4 border-white shadow-2xl relative">
               <video 
                 ref={videoRef} 
                 autoPlay 
@@ -776,46 +776,46 @@ const ClientCamera = () => {
               
               <div className="absolute inset-x-0 top-0 p-8 flex justify-between items-start pointer-events-none">
                 {isStreaming && (
-                  <div className="flex items-center gap-2 px-4 py-2 bg-secondary rounded-full text-[10px] font-black text-white shadow-xl animate-pulse">
-                    <div className="w-1.5 h-1.5 bg-white rounded-full" /> LIVE
+                  <div className="flex items-center gap-2 px-5 py-2.5 bg-secondary rounded-full text-[10px] font-black text-white shadow-2xl animate-pulse">
+                    <div className="w-2 h-2 bg-white rounded-full" /> LIVE
                   </div>
                 )}
                 {isStreaming && (
-                  <div className="px-4 py-2 bg-black/40 backdrop-blur-md rounded-full text-[10px] font-black text-white border border-white/10 shadow-xl">
+                  <div className="px-5 py-2.5 bg-black/40 backdrop-blur-xl rounded-full text-[10px] font-black text-white border border-white/10 shadow-2xl">
                     {formatDuration(streamDuration)}
                   </div>
                 )}
               </div>
 
               {!isStreaming && (
-                <div className="absolute inset-0 flex flex-col items-center justify-center gap-4">
-                   <div className="w-20 h-20 bg-white/10 rounded-full flex items-center justify-center border border-white/20 backdrop-blur-sm">
-                     <Tv size={32} className="text-white/40" strokeWidth={1} />
+                <div className="absolute inset-0 flex flex-col items-center justify-center gap-6">
+                   <div className="w-24 h-24 bg-white/5 rounded-full flex items-center justify-center border border-white/10 backdrop-blur-md">
+                     <Tv size={40} className="text-white/30" strokeWidth={1} />
                    </div>
-                   <p className="text-white/60 font-black text-[10px] uppercase tracking-widest">Ready to broadcast?</p>
+                   <p className="text-white/60 font-black text-[10px] uppercase tracking-[0.3em]">Ready to broadcast?</p>
                 </div>
               )}
             </div>
 
-            <div className="space-y-4 pt-2">
+            <div className="space-y-6 pt-4">
               {!isStreaming ? (
                 <button 
                   onClick={startLive}
-                  className="btn-premium btn-premium-primary !py-7 !rounded-full"
+                  className="btn-premium btn-premium-primary !py-8 !rounded-full !bg-primary !text-white shadow-primary/30"
                 >
-                  <Tv size={32} /> Start Livestream
+                  <Tv size={28} /> START LIVESTREAM
                 </button>
               ) : (
                 <button 
                   onClick={stopLive}
-                  className="btn-premium btn-premium-danger !py-7"
+                  className="btn-premium btn-premium-danger !py-8 !rounded-full !bg-secondary shadow-secondary/30"
                 >
-                  <X size={32} /> Stop Streaming
+                  <RotateCcw size={28} className="animate-spin-slow" /> STOP BROADCAST
                 </button>
               )}
-              <div className="flex items-center justify-center gap-2 opacity-40">
-                <Shield size={12} />
-                <p className="text-[10px] text-text-muted uppercase tracking-[0.2em] font-black">Secure Real-Time Feed</p>
+              <div className="flex items-center justify-center gap-2 text-secondary opacity-60">
+                 <Shield size={14} />
+                 <span className="text-[10px] font-black tracking-[0.2em] uppercase">Secure Real-Time Feed</span>
               </div>
             </div>
           </div>
